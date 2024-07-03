@@ -25,6 +25,8 @@ where TResponse : UnityEvent<TType>
         [SerializeField]
         protected TType _debugValue = default(TType);
 
+        public event System.Action<TType> onEventRaised;
+
         public void OnEventRaised(TType value)
         {
             RaiseResponse(value);
@@ -36,6 +38,7 @@ where TResponse : UnityEvent<TType>
         private void RaiseResponse(TType value)
         {
             _response.Invoke(value);
+            onEventRaised?.Invoke(value);
         }
         private void OnEnable()
         {
@@ -57,6 +60,7 @@ where TResponse : UnityEvent<TType>
             _event.AddListener(this);
             _previouslyRegisteredEvent = _event;
         }
+
     }
     public abstract class BaseGameEventListener<TEvent, TResponse> : DebuggableGameEventListener, IGameEventListener
         where TEvent : GameEventBase
@@ -72,6 +76,8 @@ where TResponse : UnityEvent<TType>
         [SerializeField]
         private TResponse _response = default(TResponse);
 
+        public event System.Action onEventRaised;
+
         public void OnEventRaised()
         {
             RaiseResponse();
@@ -83,6 +89,7 @@ where TResponse : UnityEvent<TType>
         protected void RaiseResponse()
         {
             _response.Invoke();
+            onEventRaised?.Invoke();
         }
         private void OnEnable()
         {
