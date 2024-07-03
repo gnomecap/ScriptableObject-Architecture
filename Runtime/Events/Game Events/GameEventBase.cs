@@ -16,10 +16,10 @@ namespace ScriptableObjectArchitecture
             AddStackTrace(value);
 
             for (int i = _typedListeners.Count - 1; i >= 0; i--)
-                _typedListeners[i].OnEventRaised(value);
+                _typedListeners[i].EventRaised(value);
 
             for (int i = _listeners.Count - 1; i >= 0; i--)
-                _listeners[i].OnEventRaised();
+                _listeners[i].EventRaised();
 
             for (int i = _typedActions.Count - 1; i >= 0; i--)
                 _typedActions[i](value);
@@ -80,7 +80,7 @@ namespace ScriptableObjectArchitecture
             AddStackTrace();
 
             for (int i = _listeners.Count - 1; i >= 0; i--)
-                _listeners[i].OnEventRaised();
+                _listeners[i].EventRaised();
 
             for (int i = _actions.Count - 1; i >= 0; i--)
                 _actions[i]();

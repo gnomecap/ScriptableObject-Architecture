@@ -38,7 +38,7 @@ where TResponse : UnityEvent<TType>
         private void RaiseResponse(TType value)
         {
             _response.Invoke(value);
-            onEventRaised?.Invoke(value);
+            OnEventRaised?.Invoke(value);
         }
         private void OnEnable()
         {
@@ -89,7 +89,7 @@ where TResponse : UnityEvent<TType>
         protected void RaiseResponse()
         {
             _response.Invoke();
-            onEventRaised?.Invoke();
+            OnEventRaised?.Invoke();
         }
         private void OnEnable()
         {
