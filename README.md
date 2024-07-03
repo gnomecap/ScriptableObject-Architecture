@@ -1,3 +1,14 @@
+> [!NOTE] 
+> This is GnomeCap's fork of Daniel Everland's ScriptableObject-Architecture package. Suited to our needs. Use with a grain of salt 😎
+
+# Changelog:
+- Added a Unity Action to allow a script with a reference to a GameEventListener to subscribe to EventRaised without having to use the Inspector GUI.
+- Formatted as a package for potential OpenUPM Integration
+- Reorganized CreateAssetMenu items to go under "ScriptableObjectArchitecture" tab more neatly.
+- Implemented [pull request #170](https://github.com/DanielEverland/ScriptableObject-Architecture/pull/170)
+- Implemented [pull reuest #157](https://github.com/DanielEverland/ScriptableObject-Architecture/pull/157)
+- Implemented [pull request #156](https://github.com/DanielEverland/ScriptableObject-Architecture/pull/156)
+
 # ScriptableObject-Architecture
 [![openupm](https://img.shields.io/npm/v/com.danieleverland.scriptableobjectarchitecture?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.danieleverland.scriptableobjectarchitecture/)
 
