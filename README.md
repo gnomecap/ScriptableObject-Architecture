@@ -1,7 +1,7 @@
-# ScriptableObject-Architecture
+# GnomeCap Games' ScriptableObject-Architecture
 [![openupm](https://img.shields.io/npm/v/com.danieleverland.scriptableobjectarchitecture?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.danieleverland.scriptableobjectarchitecture/)
 
-Makes using Scriptable Objects as a fundamental part of your architecture in Unity super easy
+Makes using Scriptable Objects as a fundamental part of your architecture in Unity super easy. Forked from [Daniel Everland's ScriptableObject-Architecture](https://github.com/DanielEverland/ScriptableObject-Architecture/)
 
 Based on Ryan Hipple's 2017 Unite talk https://www.youtube.com/watch?v=raQ3iHhE_Kk
 
