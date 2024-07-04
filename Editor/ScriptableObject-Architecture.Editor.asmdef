@@ -1,0 +1,18 @@
+{
+    "name": "ScriptableObject-Architecture.editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:f3a2cc926899e0244a0c79d839b14630"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
