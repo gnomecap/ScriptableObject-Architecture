@@ -1,5 +1,5 @@
 # GnomeCap's ScriptableObject-Architecture
-[![openupm](https://img.shields.io/npm/v/com.danieleverland.scriptableobjectarchitecture?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.danieleverland.scriptableobjectarchitecture/)
+[![openupm](https://img.shields.io/npm/v/com.gnomecap.scriptableobject-architecture?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.gnomecap.scriptableobject-architecture/)
 
 Makes using Scriptable Objects as a fundamental part of your architecture in Unity super easy. Forked from [Daniel Everland's ScriptableObject-Architecture](https://github.com/DanielEverland/ScriptableObject-Architecture/)
 
