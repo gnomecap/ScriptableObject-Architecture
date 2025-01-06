@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using UnityEditor.AnimatedValues;
+using System.Collections.Generic;
 
 namespace ScriptableObjectArchitecture.Editor
 {
@@ -23,7 +24,9 @@ namespace ScriptableObjectArchitecture.Editor
         private AnimBool _useDefaultValueAnimation;
         private AnimBool _raiseWarningAnimation;
         private AnimBool _isClampedVariableAnimation;
-        
+
+        private List<MonoBehaviour> _referencingGameObjects = new List<MonoBehaviour>();
+
         private const string READONLY_TOOLTIP = "Should this value be changable during runtime? Will still be editable in the inspector regardless";
 
         protected virtual void OnEnable()
@@ -45,7 +48,10 @@ namespace ScriptableObjectArchitecture.Editor
 
             _isClampedVariableAnimation = new AnimBool(_isClamped.boolValue);
             _isClampedVariableAnimation.valueChanged.AddListener(Repaint);
+
+            FindReferencingGameObjects();
         }
+
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
@@ -56,7 +62,44 @@ namespace ScriptableObjectArchitecture.Editor
 
             DrawClampedFields();
             DrawReadonlyField();
+
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Referencing Game Objects", EditorStyles.boldLabel);
+            foreach (var go in _referencingGameObjects)
+            {
+                EditorGUILayout.ObjectField(go, typeof(MonoBehaviour), true);
+            }
+
+            serializedObject.ApplyModifiedProperties();
         }
+
+        private void FindReferencingGameObjects()
+        {
+            _referencingGameObjects.Clear();
+            BaseVariable baseVariable = target as BaseVariable;
+
+            if (baseVariable == null)
+                return;
+
+            foreach (GameObject go in GameObject.FindObjectsOfType<GameObject>())
+            {
+                MonoBehaviour[] components = go.GetComponents<MonoBehaviour>();
+                foreach (var component in components)
+                {
+                    SerializedObject so = new SerializedObject(component);
+                    SerializedProperty prop = so.GetIterator();
+                    while (prop.NextVisible(true))
+                    {
+                        if (prop.propertyType == SerializedPropertyType.ObjectReference && prop.objectReferenceValue == baseVariable)
+                        {
+                            _referencingGameObjects.Add(component);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
         protected virtual void DrawValue()
         {
             GenericPropertyDrawer.DrawPropertyDrawerLayout(_valueProperty, Target.Type);
@@ -74,6 +117,7 @@ namespace ScriptableObjectArchitecture.Editor
                 }
             }
         }
+
         protected void DrawClampedFields()
         {
             if (!IsClampable)
@@ -84,17 +128,17 @@ namespace ScriptableObjectArchitecture.Editor
 
             using (var anim = new EditorGUILayout.FadeGroupScope(_isClampedVariableAnimation.faded))
             {
-                if(anim.visible)
+                if (anim.visible)
                 {
                     using (new EditorGUI.IndentLevelScope())
                     {
                         EditorGUILayout.PropertyField(_minValueProperty);
                         EditorGUILayout.PropertyField(_maxValueProperty);
                     }
-                }                
+                }
             }
-            
         }
+
         protected void DrawReadonlyField()
         {
             if (_isClamped.boolValue)
@@ -114,6 +158,7 @@ namespace ScriptableObjectArchitecture.Editor
             }
         }
     }
+
     [CustomEditor(typeof(BaseVariable<,>), true)]
     public class BaseVariableWithEventEditor : BaseVariableEditor
     {

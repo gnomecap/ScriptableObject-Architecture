@@ -1,6 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 using UnityEditorInternal;
+using System.Collections.Generic;
 
 namespace ScriptableObjectArchitecture.Editor
 {
@@ -14,6 +15,7 @@ namespace ScriptableObjectArchitecture.Editor
         }
 
         private ReorderableList _reorderableList;
+        private List<MonoBehaviour> _referencingGameObjects = new List<MonoBehaviour>();
 
         // UI
         private const bool DISABLE_ELEMENTS = false;
@@ -48,7 +50,10 @@ namespace ScriptableObjectArchitecture.Editor
                 drawElementCallback = DrawElement,
                 elementHeightCallback = GetHeight,
             };
+
+            FindReferencingGameObjects();
         }
+
         public override void OnInspectorGUI()
         {
             EditorGUI.BeginChangeCheck();
@@ -59,11 +64,20 @@ namespace ScriptableObjectArchitecture.Editor
             {
                 serializedObject.ApplyModifiedProperties();
             }
+
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Referencing Game Objects", EditorStyles.boldLabel);
+            foreach (var go in _referencingGameObjects)
+            {
+                EditorGUILayout.ObjectField(go, typeof(GameObject), true);
+            }
         }
+
         private void DrawHeader(Rect rect)
         {
             EditorGUI.LabelField(rect, _titleGUIContent);
         }
+
         private void DrawElement(Rect rect, int index, bool isActive, bool isFocused)
         {
             rect = SOArchitecture_EditorUtility.GetReorderableListElementFieldRect(rect);
@@ -75,11 +89,39 @@ namespace ScriptableObjectArchitecture.Editor
 
             EditorGUI.EndDisabledGroup();
         }
+
         private float GetHeight(int index)
         {
             SerializedProperty property = CollectionItemsProperty.GetArrayElementAtIndex(index);
 
             return GenericPropertyDrawer.GetHeight(property, Target.Type) + EditorGUIUtility.standardVerticalSpacing;
+        }
+
+        private void FindReferencingGameObjects()
+        {
+            _referencingGameObjects.Clear();
+            BaseCollection baseCollection = target as BaseCollection;
+
+            if (baseCollection == null)
+                return;
+
+            foreach (GameObject go in GameObject.FindObjectsOfType<GameObject>())
+            {
+                MonoBehaviour[] components = go.GetComponents<MonoBehaviour>();
+                foreach (var component in components)
+                {
+                    SerializedObject so = new SerializedObject(component);
+                    SerializedProperty prop = so.GetIterator();
+                    while (prop.NextVisible(true))
+                    {
+                        if (prop.propertyType == SerializedPropertyType.ObjectReference && prop.objectReferenceValue == baseCollection)
+                        {
+                            _referencingGameObjects.Add(component);
+                            break;
+                        }
+                    }
+                }
+            }
         }
     }
 }
